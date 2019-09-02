@@ -1,0 +1,65 @@
+<form class="layui-form layui-box" style='padding:25px 30px 20px 0' action="__SELF__" data-auto="true" method="post">
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">名称</label>
+        <div class="layui-input-block">
+            <input name="name" value='{$vo.name|default=""}' required="required" pattern="^.{2,}$"
+            title="请输入名称" placeholder="请输入2位及以上字符名称" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">时间</label>
+        <div class="layui-input-inline" style="width:200px;">
+            <input type="text" name="start_time" value='{$vo.start_time|default=""}'
+                   title="请输入开始时间" class="layui-input fm_time"/>
+        </div>
+        <label class="layui-form-label">结束时间</label>
+        <div class="layui-input-inline" style="width:200px;">
+            <input type="text" name="end_time" value='{$vo.end_time|default=""}'
+                   title="请输入结束时间" class="layui-input fm_time" style="width:200px;"/>
+        </div>
+    </div>
+    
+    <div class="layui-form-item">
+        <label class="layui-form-label">描述</label>
+        <div class="layui-input-block">
+            <textarea placeholder="请输入描述" title="请输入描述" class="layui-textarea"
+                      name="title">{$vo.title|default=""}</textarea>
+        </div>
+    </div>
+    
+    <div class="layui-form-item">
+        <label class="layui-form-label">分类</label>
+        <div class="layui-input-inline" style='width:200px'>
+            <select name="sort_id">
+                <option value="1">财经</option>
+            </select>
+        </div>
+        <label class="layui-form-label" style="width:40px;">排序</label>
+        <div class="layui-input-inline" style='width:100px'>
+            <input type="text" name="order" value='{$vo.score|default="1"}' pattern="^[0-9]{1,3}$"
+                   title="请输入积分" class="layui-input"/>
+        </div>
+        <label class="layui-form-label" style="width:40px;">积分</label>
+        <div class="layui-input-inline" style='width:100px'>
+            <input type="text" name="score" value='{$vo.score|default="1"}' pattern="^[0-9]{1,3}$"
+                   title="请输入积分" class="layui-input"/>
+        </div>
+    </div>
+
+    <div class="hr-line-dashed"></div>
+
+    <div class="layui-form-item text-center">
+        {if isset($vo['id'])}<input type='hidden' value='{$vo.id}' name='id'/>{/if}
+        <button class="layui-btn" type='submit'>保存数据</button>
+        <button class="layui-btn layui-btn-danger" type='button' data-confirm="确定要取消编辑吗？" data-close>取消编辑</button>
+    </div>
+    <script>
+        window.form.render();
+        //window.laydate.render({elem: '.fm_time', type: 'datetime'});
+        lay('.fm_time').each(function(){
+            laydate.render({elem: this,trigger: 'click', type: 'datetime',theme: 'grid'});
+        }); 
+    </script>
+</form>

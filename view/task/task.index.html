@@ -1,0 +1,119 @@
+{extend name='extra@admin/content'}
+
+{block name="button"}
+<div class="nowrap pull-right" style="margin-top:10px">
+    <button data-modal='{:url("$classuri/edit")}' data-title="添加用户" class='layui-btn layui-btn-small'>
+        <i class='fa fa-plus'></i> 添加任务
+    </button>
+</div>
+{/block}
+
+{block name="content"}
+
+<!-- 表单搜索 开始 -->
+<form class="layui-form layui-form-pane form-search" action="__SELF__" onsubmit="return false" method="get">
+    <div class="layui-form-item layui-inline">
+        <label class="layui-form-label">任务ID</label>
+        <div class="layui-input-inline">
+            <input name="id" value="{$Think.get.id|default=''}" placeholder="请输入任务ID" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item layui-inline">
+        <label class="layui-form-label">标题</label>
+        <div class="layui-input-inline">
+            <input name="title" value="{$Think.get.title|default=''}" placeholder="请输标题" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item layui-inline">
+        <label class="layui-form-label">时间</label>
+        <div class="layui-input-inline">
+            <input name="start_time" id='range-date' value="{$Think.get.start_time|default=''}"
+                   placeholder="请选择时间" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item layui-inline">
+        <button class="layui-btn layui-btn-primary"><i class="layui-icon">&#xe615;</i> 搜 索</button>
+    </div>
+</form>
+<!-- 表单搜索 结束 -->
+
+<form onsubmit="return false;" data-auto="true" method="post">
+    {if empty($list)}
+    <p class="help-block text-center well">没 有 记 录 哦！</p>
+    {else}
+    <input type="hidden" value="resort" name="action"/>
+    <table class="layui-table" lay-skin="line" lay-size="sm">
+        <thead>
+            <tr>
+                <th class='text-left nowrap'>ID</th>
+                <th class='text-left nowrap'>名称</th>
+                <th class='text-left nowrap'>分类</th>
+                <th class='text-left nowrap'>积分</th>
+                <th class='text-left nowrap'>开始时间</th>
+                <th class='text-left nowrap'>结束时间</th>
+                <th class='text-left nowrap'>状态</th>
+                <th class='text-left nowrap'>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            {foreach $list as $key=>$vo}
+            <tr>
+                <td class='list-table-check-td'>
+                    {$vo.id}
+                </td>
+                <td class='text-left nowrap'>
+                    {$vo.name}
+                </td>
+                <td class='text-left nowrap'>
+                    {$vo.sort_id}
+                </td>
+                <td class='text-left nowrap'>
+                    {$vo.score}
+                </td>
+                <td class='text-left nowrap'>
+                    {$vo.start_time}
+                </td>
+                <td class='text-left nowrap'>
+                    {$vo.end_time}
+                </td>
+                <td class='text-left nowrap'>
+                    {if $vo.status eq 0}
+                    <span>已禁用</span>
+                    {elseif $vo.status eq 1}
+                    <span style="color:#090">使用中</span>
+                    {/if}
+                </td>
+                <td class='text-left nowrap'>
+                    {if auth("$classuri/edit")}
+                    <span class="text-explode">|</span>
+                    <a data-modal='{:url("$classuri/edit")}?id={$vo.id}' href="javascript:void(0)">编辑</a>
+                    {/if}
+                    {if $vo.status eq 1 and auth("$classuri/status")}
+                    <span class="text-explode">|</span>
+                    <a data-update="{$vo.id}" data-field='status' data-value='0' data-action='{:url("$classuri/status")}'
+                       href="javascript:void(0)">下线</a>
+                    {else}
+                    <span class="text-explode">|</span>
+                    <a data-update="{$vo.id}" data-field='status' data-value='1' data-action='{:url("$classuri/status")}'
+                       href="javascript:void(0)">上线</a>
+                    {/if}
+                    {if auth("$classuri/del")}
+                    <span class="text-explode">|</span>
+                    <a data-update="{$vo.id}" data-field='delete' data-action='{:url("$classuri/del")}'
+                       href="javascript:void(0)">删除</a>
+                    {/if}
+                </td>
+            </tr>
+            {/foreach}
+        </tbody>
+    </table>
+    {if isset($page)}<p>{$page}</p>{/if}
+    {/if}
+    <script>
+        window.laydate.render({range: true, elem: '#range-date', format: 'yyyy/MM/dd'});
+    </script>
+</form>
+{/block}
