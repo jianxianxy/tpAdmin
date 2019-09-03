@@ -16,6 +16,7 @@ class Task extends BasicAdmin
     public $table = 'PeerlessTask';
     public $sort_table = 'PeerlessSort';
     public $tpl_table = 'PeerlessTpl';
+    public $type = [1=>'单选',2=>'多选',3=>'整数'];
     //任务列表
     public function index(){
         $this->title = '任务管理';
@@ -23,12 +24,31 @@ class Task extends BasicAdmin
         $db = Db::name($this->table)->where(['is_deleted' => '0']);
         $result = parent::_list($db,true,false);
         $this->assign('title', $this->title);
+        $sort = Db::table('peerless_sort')->where('is_deleted',0)->column('name','id');
+        foreach($result['list'] AS $key => $val){
+            $result['list'][$key]['sort_name'] = $sort[$val['sort_id']];
+        }
         return $this->fetch('./view/task/task.index.html', $result);
     }
     //任务编辑
     public function edit()
     {
+        $sort = Db::table('peerless_sort')->where('is_deleted',0)->column('name','id');
+        $this->assign('sort', $sort);
+        $tpl = Db::table('peerless_tpl')->column('name','id');
+        $this->assign('tpl', $tpl);
         return $this->_form($this->table, './view/task/task.form.html');
+    }
+    public function status(){
+        $post = $this->request->post();
+        $tabcol['id'] = $post['id'];
+        $tabcol['status'] = $post['value'];
+        $db = Db::name($this->table);
+        $result = DataService::save($db, $tabcol,'id');
+        if ($result !== false) {
+            $this->success('恭喜, 上线成功!', '');
+        }
+        $this->error('失败, 请稍候再试!');
     }
     //任务分类列表
     public function sort(){
@@ -56,7 +76,7 @@ class Task extends BasicAdmin
         $db = Db::name($this->tpl_table);
         $result = parent::_list($db,true,false);
         $this->assign('title', $this->title);
-        $this->assign('type',[1=>'单选',2=>'多选',3=>'猜涨跌']);
+        $this->assign('type',$this->type);
         return $this->fetch('./view/task/task.tpl.html', $result);
     }
     //任务模板编辑
@@ -64,14 +84,18 @@ class Task extends BasicAdmin
     {
         if($this->request->isPost()){
             $post = $this->request->post();
-            $data = array();
-            foreach($post['key'] AS $key => $val){
-                $data[$val] = $post['val'][$key];
-            }
-            $tabcol['id'] = isset($post['id']) ? $post['id'] : 0;
-            $tabcol['option'] = json_encode($data);
-            $tabcol['name'] = trim($post['name']);
             $tabcol['type'] = intval($post['type']);
+            if($post['type'] != 3){
+                $data = array();
+                foreach($post['key'] AS $key => $val){
+                    $data[$val] = $post['val'][$key];
+                }
+                $tabcol['option'] = json_encode($data);
+            }else{
+                $tabcol['option'] = '';
+            }            
+            $tabcol['id'] = isset($post['id']) ? $post['id'] : 0;            
+            $tabcol['name'] = trim($post['name']);            
             $tabcol['style'] = intval($post['style']);
             $db = Db::name($this->tpl_table);
             $result = DataService::save($db, $tabcol,'id');
@@ -85,7 +109,7 @@ class Task extends BasicAdmin
                 $result = Db::table('peerless_tpl')->where('id',$this->request->get('id'))->find();
                 $result['option'] = json_decode($result['option'],true);
             }
-            $this->assign('type',[1=>'单选',2=>'多选',3=>'猜涨跌']);            
+            $this->assign('type',$this->type);            
             return $this->fetch('./view/task/task.tplform.html', ['vo'=>$result]);
         }        
     }

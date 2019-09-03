@@ -8,11 +8,11 @@
     </div>    
     
     <div class="layui-form-item">
-        <label class="layui-form-label">上级</label>
+        <label class="layui-form-label">类型</label>
         <div class="layui-input-inline" style="width:120px;">
-            <select name="type">
+            <select name="type" id="chtype" lay-filter="chtype">
                 {foreach $type AS $key => $val}
-                <option value="{$key}">{$val}</option>
+                <option value="{$key}" {if $key == $vo.type}selected{/if}>{$val}</option>
                 {/foreach}
             </select>
         </div>
@@ -24,9 +24,10 @@
             </select>
         </div>
     </div>
+    {if $vo.type != 3}
     {php}$first = true;{/php}
     {foreach $vo.option as $key => $val}
-    <div class="layui-form-item">
+    <div class="layui-form-item form-option">
         <label class="layui-form-label">选项</label>
         <div class="layui-input-inline" style="width: 60px;">
             <input name="key[]" value="{$key}" class="layui-input"/>            
@@ -43,6 +44,7 @@
         {php}endif;{/php}
     </div>
     {/foreach}
+    {/if}
     <div class="hr-line-dashed" id="node_bottom"></div>
 
     <div class="layui-form-item text-center">
@@ -64,6 +66,13 @@
         function remove_node(obj){
             $(obj).parent().remove();
         }
+        layui.form.on('select(chtype)', function (data) {
+            if(data.value == 3){
+                $(".form-option").hide();
+            }else{
+                $(".form-option").show();
+            }
+        });
     </script>
 </form>
 

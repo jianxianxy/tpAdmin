@@ -28,11 +28,11 @@ CREATE TABLE `peerless_sort` (
   `type` tinyint(4) DEFAULT '1' COMMENT '1.通用分类',
   `is_deleted` tinyint(4) DEFAULT '0' COMMENT '1.已删除',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 /*Data for the table `peerless_sort` */
 
-insert  into `peerless_sort`(`id`,`pid`,`name`,`order`,`type`,`is_deleted`) values (1,0,'财经',1,1,0),(3,0,'预测',1,1,0),(5,1,'股票',1,1,0);
+insert  into `peerless_sort`(`id`,`pid`,`name`,`order`,`type`,`is_deleted`) values (1,0,'财经',1,1,0),(3,0,'预测',1,1,0),(5,1,'股票',1,1,0),(6,3,'彩票',1,1,0);
 
 /*Table structure for table `peerless_task` */
 
@@ -43,6 +43,7 @@ CREATE TABLE `peerless_task` (
   `name` varchar(32) COLLATE utf32_bin DEFAULT NULL COMMENT '名称',
   `order` tinyint(4) DEFAULT '1' COMMENT '排序',
   `sort_id` int(11) DEFAULT NULL COMMENT '分类ID',
+  `tpl_id` int(11) DEFAULT NULL COMMENT '模板ID',
   `title` varchar(1024) COLLATE utf32_bin DEFAULT NULL COMMENT '题目',
   `answer` varchar(32) COLLATE utf32_bin DEFAULT '""' COMMENT '答案',
   `score` int(11) DEFAULT '1' COMMENT '积分',
@@ -51,11 +52,11 @@ CREATE TABLE `peerless_task` (
   `status` tinyint(4) DEFAULT '0' COMMENT '1.已上线',
   `is_deleted` tinyint(4) DEFAULT '0' COMMENT '1.已删除',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf32 COLLATE=utf32_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf32 COLLATE=utf32_bin;
 
 /*Data for the table `peerless_task` */
 
-insert  into `peerless_task`(`id`,`name`,`order`,`sort_id`,`title`,`answer`,`score`,`start_time`,`end_time`,`status`,`is_deleted`) values (1,'猜涨跌',1,1,'明日上证指数？','\"\"',1,'2019-08-22 00:05:46','2019-08-21 12:06:03',1,0),(2,'猜一猜',2,1,'裁片铠甲','\"\"',2,'2019-08-22 00:00:00','2019-08-23 00:00:00',1,0),(3,'彩票预测',3,1,'明日大乐透开奖预测。','\"\"',3,'2019-08-23 00:00:00','2019-08-24 00:00:00',1,0);
+insert  into `peerless_task`(`id`,`name`,`order`,`sort_id`,`tpl_id`,`title`,`answer`,`score`,`start_time`,`end_time`,`status`,`is_deleted`) values (3,'彩票预测',3,6,8,'明日双色球蓝球预测。','\"\"',3,'2019-08-23 00:00:00','2019-08-24 00:00:00',0,0),(4,'猜涨跌',1,5,1,'明日上证指数涨跌预测。','\"\"',1,'2019-09-03 00:00:00','2019-09-04 00:00:00',0,0);
 
 /*Table structure for table `peerless_tpl` */
 
@@ -72,7 +73,7 @@ CREATE TABLE `peerless_tpl` (
 
 /*Data for the table `peerless_tpl` */
 
-insert  into `peerless_tpl`(`id`,`name`,`type`,`style`,`option`) values (1,'猜涨跌',1,1,'{\"1\":\"[-3]\",\"2\":\"[-1,-3]\",\"3\":\"(0,-1]\",\"4\":\"[0,1]\",\"5\":\"[1,3]\",\"6\":\"[3]\"}'),(8,'猜涨跌.简单',1,1,'{\"1\":\"\\u8dcc\",\"2\":\"\\u6da8\"}');
+insert  into `peerless_tpl`(`id`,`name`,`type`,`style`,`option`) values (1,'猜涨跌',1,1,'{\"1\":\"[-3]\",\"2\":\"[-1,-3]\",\"3\":\"(0,-1]\",\"4\":\"[0,1]\",\"5\":\"[1,3]\",\"6\":\"[3]\"}'),(8,'猜·双色球篮球',3,1,'');
 
 /*Table structure for table `system_auth` */
 
@@ -139,11 +140,11 @@ CREATE TABLE `system_log` (
   `content` text NOT NULL COMMENT '操作内容描述',
   `create_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8 COMMENT='系统操作日志表';
+) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=utf8 COMMENT='系统操作日志表';
 
 /*Data for the table `system_log` */
 
-insert  into `system_log`(`id`,`ip`,`node`,`username`,`action`,`content`,`create_at`) values (23,'127.0.0.1','admin/login/index','admin','系统管理','用户登录系统成功','2019-08-22 15:00:24'),(24,'127.0.0.1','admin/login/out','admin','系统管理','用户退出系统成功','2019-08-22 18:36:57'),(25,'127.0.0.1','admin/login/index','admin','系统管理','用户登录系统成功','2019-08-22 18:37:01'),(26,'127.0.0.1','admin/login/index','admin','系统管理','用户登录系统成功','2019-08-31 20:36:59'),(27,'127.0.0.1','admin/login/index','admin','系统管理','用户登录系统成功','2019-08-31 21:05:53'),(28,'127.0.0.1','admin/login/index','admin','系统管理','用户登录系统成功','2019-09-01 19:52:26'),(29,'127.0.0.1','admin/login/index','admin','系统管理','用户登录系统成功','2019-09-02 19:14:29');
+insert  into `system_log`(`id`,`ip`,`node`,`username`,`action`,`content`,`create_at`) values (23,'127.0.0.1','admin/login/index','admin','系统管理','用户登录系统成功','2019-08-22 15:00:24'),(24,'127.0.0.1','admin/login/out','admin','系统管理','用户退出系统成功','2019-08-22 18:36:57'),(25,'127.0.0.1','admin/login/index','admin','系统管理','用户登录系统成功','2019-08-22 18:37:01'),(26,'127.0.0.1','admin/login/index','admin','系统管理','用户登录系统成功','2019-08-31 20:36:59'),(27,'127.0.0.1','admin/login/index','admin','系统管理','用户登录系统成功','2019-08-31 21:05:53'),(28,'127.0.0.1','admin/login/index','admin','系统管理','用户登录系统成功','2019-09-01 19:52:26'),(29,'127.0.0.1','admin/login/index','admin','系统管理','用户登录系统成功','2019-09-02 19:14:29'),(30,'127.0.0.1','admin/login/index','admin','系统管理','用户登录系统成功','2019-09-03 19:54:22'),(31,'127.0.0.1','admin/login/index','admin','系统管理','用户登录系统成功','2019-09-03 20:53:10');
 
 /*Table structure for table `system_menu` */
 
@@ -232,7 +233,7 @@ CREATE TABLE `system_user` (
 
 /*Data for the table `system_user` */
 
-insert  into `system_user`(`id`,`username`,`password`,`qq`,`mail`,`phone`,`desc`,`login_num`,`login_at`,`status`,`authorize`,`is_deleted`,`create_by`,`create_at`) values (10000,'admin','21232f297a57a5a743894a0e4a801fc3','22222222','sdfsd@Qq.com1','13888888855','dfgsdfgsfd',27057,'2019-09-02 19:14:29',1,'1',0,NULL,'2015-11-13 15:14:22'),(10001,'leiluo','08fbbc6451016ca1b6a5f4ea5ed52da7',NULL,'','','',0,NULL,1,'2',0,NULL,'2019-08-21 18:00:34');
+insert  into `system_user`(`id`,`username`,`password`,`qq`,`mail`,`phone`,`desc`,`login_num`,`login_at`,`status`,`authorize`,`is_deleted`,`create_by`,`create_at`) values (10000,'admin','21232f297a57a5a743894a0e4a801fc3','22222222','sdfsd@Qq.com1','13888888855','dfgsdfgsfd',27059,'2019-09-03 20:53:10',1,'1',0,NULL,'2015-11-13 15:14:22'),(10001,'leiluo','08fbbc6451016ca1b6a5f4ea5ed52da7',NULL,'','','',0,NULL,1,'2',0,NULL,'2019-08-21 18:00:34');
 
 /*Table structure for table `wechat_fans` */
 
