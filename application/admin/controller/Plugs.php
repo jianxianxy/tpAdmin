@@ -53,16 +53,17 @@ class Plugs extends BasicAdmin
         $file = $this->request->file('file');
         $ext = strtolower(pathinfo($file->getInfo('name'), 4));
         $md5 = str_split($this->request->post('md5'), 16);
-        $filename = join('/', $md5) . ".{$ext}";
+        $filetoken = join('/', $md5) . ".{$ext}";
+        $filename = date('Ym'). '/' . $md5[1] . ".{$ext}";
         if (!in_array($ext, explode(',', strtolower(sysconf('storage_local_exts'))))) {
             return json(['code' => 'ERROR', 'msg' => '文件上传类型受限']);
         }
         // 文件上传Token验证
-        if ($this->request->post('token') !== md5($filename . session_id())) {
+        if ($this->request->post('token') !== md5($filetoken . session_id())) {
             return json(['code' => 'ERROR', 'msg' => '文件上传验证失败']);
         }
         // 文件上传处理
-        if (($info = $file->move('static' . DS . 'upload' . DS . $md5[0], $md5[1], true))) {
+        if (($info = $file->move('static' . DS . 'upload' . DS . date('Ym'), $md5[1], true))) {
             if (($site_url = FileService::getFileUrl($filename, 'local'))) {
                 return json(['data' => ['site_url' => $site_url], 'code' => 'SUCCESS', 'msg' => '文件上传成功']);
             }
