@@ -95,7 +95,7 @@ class DataService
         if ($db->where($where)->count() > 0) {
             return $db->where($where)->update($data) !== false;
         }
-        return $db->insert($data) !== false;
+        return $db->insertGetId($data);
     }
 
     /**

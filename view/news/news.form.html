@@ -5,8 +5,8 @@
     <div class="layui-form-item">
         <label class="layui-form-label">名称</label>
         <div class="layui-input-block" style="width:600px;">
-            <input name="name" value='{$vo.name|default=""}' required="required" pattern="^.**"
-            title="请输入名称" class="layui-input">
+            <input name="title" value='{$vo.title|default=""}' required="required" pattern="^.*"
+            title="请输入标题" class="layui-input">
         </div>
     </div>
     
@@ -14,18 +14,14 @@
         <label class="layui-form-label">分类</label>
         <div class="layui-input-inline" style='width:200px'>
             <select name="sort_id">
-               
+                {foreach $sort AS $key => $val}
+                <option value="{$key}">{$val}</option>
+                {/foreach}
             </select>
         </div>
         <label class="layui-form-label" style="width:40px;">排序</label>
         <div class="layui-input-inline" style='width:100px'>
-            <input type="text" name="order" value='{$vo.score|default="1"}' pattern="^[0-9]{1,3}$"
-                   title="请输入积分" class="layui-input"/>
-        </div>
-        <label class="layui-form-label" style="width:40px;">积分</label>
-        <div class="layui-input-inline" style='width:100px'>
-            <input type="text" name="score" value='{$vo.score|default="1"}' pattern="^[0-9]{1,3}$"
-                   title="请输入积分" class="layui-input"/>
+            <input type="text" name="order" value='{$vo.order|default="1"}' class="layui-input"/>
         </div>
     </div>
     
@@ -33,21 +29,21 @@
         <label class="layui-form-label">章节</label>
         <div class="layui-input-inline" style="width:100px;">
             <div style="position:relative">
-                <div class="uploadimage transition" style="display:block;"><input type="hidden" name="file_1"/></div>
-                <a data-file="one" data-field="file_1" data-type="png,jpg" data-uptype="local" href="javascript:void(0)"
-                   class="uploadbutton">选择章节图片</a>
+                <div class="uploadimage transition" style="display:block;" data-tips-image="{$vo.file_1}">
+                    <input type="hidden" name="file_1" value="{$vo.file_1}"/>
+                </div>
+                {if $vo.file_1 != ''}
+                {php}$play_1 = 'none';$play_2 = 'block';{/php}
+                {else}
+                {php}$play_1 = 'block';$play_2 = 'none';{/php}
+                {/if}
+                <a style="display:{$play_1};" data-file="one" data-field="file_1" data-type="png,jpg" data-uptype="local" href="javascript:void(0)" class="uploadbutton">选择章节图片</a>
+                <a style="display:{$play_2};" onclick="delImg('file_1')">删除章节图片</a>
             </div>
         </div>
-        <script>
-        require(['jquery'], function () {
-            $('[name="file_2"]').on('change', function () {
-                $(this).parent().attr('data-tips-image', this.value).css('backgroundImage', 'url(' + this.value + ')');
-            });
-        });
-        </script>
         <div class="layui-input-inline" style="width:500px;">
             <textarea placeholder="请输入描述" title="请输入描述" class="layui-textarea"
-                      name="title">{$vo.title|default=""}</textarea>
+                      name="con_1">{$vo.con_1|default=""}</textarea>
         </div>
     </div>
     
@@ -55,21 +51,21 @@
         <label class="layui-form-label">章节</label>
         <div class="layui-input-inline" style="width:100px;">
             <div style="position:relative">
-                <div class="uploadimage transition" style="display:block;"><input type="hidden" name="file_2"/></div>
-                <a data-file="one" data-field="file_2" data-type="png,jpg" data-uptype="local" href="javascript:void(0)"
-                   class="uploadbutton">选择章节图片</a>
+                <div class="uploadimage transition" style="display:block;" data-tips-image="{$vo.file_2}">
+                    <input type="hidden" name="file_2" value="{$vo.file_2}"/>
+                </div>
+                {if $vo.file_2 != ''}
+                {php}$play_1 = 'none';$play_2 = 'block';{/php}
+                {else}
+                {php}$play_1 = 'block';$play_2 = 'none';{/php}
+                {/if}
+                <a style="display:{$play_1};" data-file="one" data-field="file_2" data-type="png,jpg" data-uptype="local" href="javascript:void(0)" class="uploadbutton">选择章节图片</a>
+                <a style="display:{$play_2};" onclick="delImg('file_2')">删除章节图片</a>
             </div>
         </div>
-        <script>
-        require(['jquery'], function () {
-            $('[name="file_2"]').on('change', function () {
-                $(this).parent().attr('data-tips-image', this.value).css('backgroundImage', 'url(' + this.value + ')');
-            });
-        });
-        </script>
         <div class="layui-input-inline" style="width:500px;">
             <textarea placeholder="请输入描述" title="请输入描述" class="layui-textarea"
-                      name="title">{$vo.title|default=""}</textarea>
+                      name="con_2">{$vo.con_2|default=""}</textarea>
         </div>
     </div>
     
@@ -77,21 +73,22 @@
         <label class="layui-form-label">章节</label>
         <div class="layui-input-inline" style="width:100px;">
             <div style="position:relative">
-                <div class="uploadimage transition" style="display:block;"><input type="hidden" name="file_3"/></div>
-                <a data-file="one" data-field="file_3" data-type="png,jpg" data-uptype="local" href="javascript:void(0)"
-                   class="uploadbutton">选择章节图片</a>
+                <div class="uploadimage transition" style="display:block;" data-tips-image="{$vo.file_3}">
+                    <input type="hidden" name="file_3" value="{$vo.file_3}"/>
+                </div>
+                {if $vo.file_3 != ''}
+                {php}$play_1 = 'none';$play_2 = 'block';{/php}
+                {else}
+                {php}$play_1 = 'block';$play_2 = 'none';{/php}
+                {/if}
+                <a style="display:{$play_1};" data-file="one" data-field="file_3" data-type="png,jpg" data-uptype="local" href="javascript:void(0)" class="uploadbutton">选择章节图片</a>
+                <a style="display:{$play_2};" onclick="delImg('file_3')">删除章节图片</a>
             </div>
         </div>
-        <script>
-        require(['jquery'], function () {
-            $('[name="file_3"]').on('change', function () {
-                $(this).parent().attr('data-tips-image', this.value).css('backgroundImage', 'url(' + this.value + ')');
-            });
-        });
-        </script>
+        
         <div class="layui-input-inline" style="width:500px;">
             <textarea placeholder="请输入描述" title="请输入描述" class="layui-textarea"
-                      name="title">{$vo.title|default=""}</textarea>
+                      name="con_3">{$vo.con_3|default=""}</textarea>
         </div>
     </div>
 
@@ -103,11 +100,35 @@
         <button class="layui-btn layui-btn-danger" type='button' data-confirm="确定要取消编辑吗？" data-close>取消编辑</button>
     </div>
     <script>
-        window.form.render();
-        //window.laydate.render({elem: '.fm_time', type: 'datetime'});
-        lay('.fm_time').each(function(){
-            laydate.render({elem: this,trigger: 'click', type: 'datetime',theme: 'grid'});
-        }); 
+    window.form.render();
+    //window.laydate.render({elem: '.fm_time', type: 'datetime'});
+    lay('.fm_time').each(function(){
+        laydate.render({elem: this,trigger: 'click', type: 'datetime',theme: 'grid'});
+    });      
+    //图片处理
+    require(['jquery'], function () {
+        var file = ['file_1','file_2','file_3'];
+        for(var i in file){
+            $('[name="'+file[i]+'"]').on('change', function () {
+                $(this).parent().attr('data-tips-image', this.value).css('backgroundImage', 'url(' + this.value + ')');
+                $(this).parent().parent().find('a:first').hide();
+                $(this).parent().parent().find('a:last').show();
+            });
+            var obj = $('[name="'+file[i]+'"]').parent();
+            var image = obj.attr('data-tips-image');
+            if(image != ''){
+                obj.attr('data-tips-image', image).css('backgroundImage', 'url(' + image + ')');
+            }
+        }    
+    });
+    //删除图片
+    function delImg(name){
+        $('[name="'+name+'"]').val("");
+        var obj = $('[name="'+name+'"]').parent();
+        obj.attr('data-tips-image', "").css('backgroundImage','url(/static/theme/default/img/image.png)');
+        obj.parent().find('a:first').show();
+        obj.parent().find('a:last').hide();
+    }
     </script>
 </form>
 {/block}

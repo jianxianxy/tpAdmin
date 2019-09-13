@@ -48,7 +48,7 @@ class BasicAdmin extends Controller
      * @param array $extendData 扩展数据
      * @return array|string
      */
-    protected function _form($dbQuery = null, $tplFile = '', $pkField = '', $where = [], $extendData = [])
+    protected function _form($dbQuery = null, $tplFile = '', $pkField = '', $where = [], $extendData = [],$dataTab = [])
     {
         $db = is_null($dbQuery) ? Db::name($this->table) : (is_string($dbQuery) ? Db::name($dbQuery) : $dbQuery);
         $pk = empty($pkField) ? ($db->getPk() ? $db->getPk() : 'id') : $pkField;
@@ -63,10 +63,14 @@ class BasicAdmin extends Controller
             return $vo;
         }
         // POST请求, 数据自动存库
-        $data = array_merge($this->request->post(), $extendData);
+        if(!empty($dataTab)){
+            $data = $dataTab;
+        }else{
+            $data = array_merge($this->request->post(), $extendData);
+        }  
         if (false !== $this->_callback('_form_filter', $data)) {
             $result = DataService::save($db, $data, $pk, $where);
-            if (false !== $this->_callback('_form_result', $result)) {
+            if (false != $this->_callback('_form_result', $result)) {
                 if ($result !== false) {
                     $this->success('恭喜, 数据保存成功!', '');
                 }

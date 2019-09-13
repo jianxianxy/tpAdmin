@@ -20,10 +20,10 @@ class Task extends BasicAdmin
     //任务列表
     public function index(){
         $this->title = '任务管理';
+        $this->assign('title', $this->title);
         $get = $this->request->get();
         $db = Db::name($this->table)->where(['is_deleted' => '0']);
-        $result = parent::_list($db,true,false);
-        $this->assign('title', $this->title);
+        $result = parent::_list($db,true,false);        
         $sort = Db::table('peerless_sort')->where('is_deleted',0)->column('name','id');
         foreach($result['list'] AS $key => $val){
             $result['list'][$key]['sort_name'] = $sort[$val['sort_id']];
