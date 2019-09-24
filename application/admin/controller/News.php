@@ -13,7 +13,7 @@ use think\Db;
  */
 class News extends BasicAdmin
 {
-    public $table = 'PeerlessNews';
+    public $table = 'peerless_news';
     public $file_table =  'peerless_news_file';
     //任务列表
     public function index(){
@@ -48,6 +48,17 @@ class News extends BasicAdmin
         }
         $this->error('失败, 请稍候再试!');
     }  
+    //删除
+    public function del(){
+        $post = $this->request->post();
+        $id = $post['id'];
+        Db::table($this->file_table)->where('fid',$id)->delete();
+        $result = Db::table($this->table)->where('id',$id)->delete();
+        if ($result > 0) {
+            $this->success('Good, 删除成功!', '');
+        }
+        $this->error('What？ 删除失败');
+    }
     //添加资讯form过滤
     public function _form_filter(&$data)
     {

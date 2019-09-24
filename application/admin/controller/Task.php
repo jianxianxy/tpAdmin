@@ -13,9 +13,9 @@ use think\Db;
  */
 class Task extends BasicAdmin
 {
-    public $table = 'PeerlessTask';
-    public $sort_table = 'PeerlessSort';
-    public $tpl_table = 'PeerlessTpl';
+    public $table = 'peerless_task';
+    public $sort_table = 'peerless_sort';
+    public $tpl_table = 'peerless_tpl';
     public $type = [1=>'单选',2=>'多选',3=>'整数'];
     //任务列表
     public function index(){
@@ -104,7 +104,7 @@ class Task extends BasicAdmin
             }
             $this->error('数据保存失败, 请稍候再试!');
         }else{
-            $result = array('option'=>[1=>'是']);
+            $result = array('option'=>[1=>'是'],'type'=>1);
             if($this->request->get('id')){
                 $result = Db::table('peerless_tpl')->where('id',$this->request->get('id'))->find();
                 $result['option'] = json_decode($result['option'],true);
@@ -113,9 +113,14 @@ class Task extends BasicAdmin
             return $this->fetch('./view/task/task.tplform.html', ['vo'=>$result]);
         }        
     }
-    
-    public function test(){
-        
-        var_dump($list);exit;
+    //删除
+    public function del(){
+        $post = $this->request->post();
+        $id = $post['id'];
+        $result = Db::table($this->table)->where('id',$id)->delete();
+        if ($result > 0) {
+            $this->success('Good, 删除成功!', '');
+        }
+        $this->error('What？ 删除失败');
     }
 }

@@ -16,6 +16,89 @@ CREATE DATABASE /*!32312 IF NOT EXISTS*/`peerless` /*!40100 DEFAULT CHARACTER SE
 
 USE `peerless`;
 
+/*Table structure for table `peerless_member` */
+
+DROP TABLE IF EXISTS `peerless_member`;
+
+CREATE TABLE `peerless_member` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `username` varchar(50) NOT NULL DEFAULT '' COMMENT '用户登录名',
+  `password` char(32) NOT NULL DEFAULT '' COMMENT '用户登录密码',
+  `mail` varchar(32) DEFAULT NULL COMMENT '联系邮箱',
+  `phone` varchar(16) DEFAULT NULL COMMENT '联系手机号',
+  `desc` varchar(255) DEFAULT '' COMMENT '备注说明',
+  `login_num` bigint(20) unsigned DEFAULT '0' COMMENT '登录次数',
+  `login_at` datetime DEFAULT NULL COMMENT '最后登录时间',
+  `status` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '状态(0:禁用,1:启用)',
+  `points` int(11) DEFAULT '0' COMMENT '积分',
+  `is_deleted` tinyint(1) unsigned DEFAULT '0' COMMENT '删除状态(1:删除,0:未删)',
+  `create_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='用户表';
+
+/*Data for the table `peerless_member` */
+
+insert  into `peerless_member`(`id`,`username`,`password`,`mail`,`phone`,`desc`,`login_num`,`login_at`,`status`,`points`,`is_deleted`,`create_at`) values (1,'leiluo','','jianxianxy@qq.com','15600889618','',1,'2019-09-13 21:10:51',1,1,0,'2019-09-13 21:11:01'),(2,'雷洛','','387780239@qq.com','18210233312','',2,'2019-09-24 19:56:22',0,100,0,'2019-09-24 19:56:28');
+
+/*Table structure for table `peerless_news` */
+
+DROP TABLE IF EXISTS `peerless_news`;
+
+CREATE TABLE `peerless_news` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
+  `title` varchar(64) DEFAULT NULL COMMENT '标题',
+  `author` int(11) DEFAULT '0' COMMENT '作者ID',
+  `sort_id` int(11) DEFAULT '0' COMMENT '分类ID',
+  `order` int(11) DEFAULT '1' COMMENT '排序',
+  `con_1` varchar(512) DEFAULT '' COMMENT '内容',
+  `con_2` varchar(512) DEFAULT '' COMMENT '内容',
+  `con_3` varchar(512) DEFAULT '' COMMENT '内容',
+  `good` int(11) DEFAULT '0' COMMENT '点赞数',
+  `status` tinyint(4) DEFAULT '0' COMMENT '1.已发表',
+  `created_at` datetime DEFAULT NULL COMMENT '创建时间',
+  `is_deleted` tinyint(4) DEFAULT '0' COMMENT '1.已删除',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+
+/*Data for the table `peerless_news` */
+
+insert  into `peerless_news`(`id`,`title`,`author`,`sort_id`,`order`,`con_1`,`con_2`,`con_3`,`good`,`status`,`created_at`,`is_deleted`) values (1,'撒地方',0,1,1,'阿斯蒂芬','阿斯蒂芬','阿斯蒂芬',0,1,'2019-09-12 22:04:49',0),(3,'阿斯蒂芬',0,1,1,'阿斯蒂芬','阿斯蒂芬','阿斯蒂芬',0,1,'2019-09-12 21:36:07',0),(4,'阿斯蒂芬',0,1,1,'阿达','阿道夫','撒地方',0,0,'2019-09-12 21:34:08',0);
+
+/*Table structure for table `peerless_news_file` */
+
+DROP TABLE IF EXISTS `peerless_news_file`;
+
+CREATE TABLE `peerless_news_file` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
+  `fid` int(10) unsigned NOT NULL COMMENT '来源ID',
+  `file` varchar(128) COLLATE utf8_bin NOT NULL DEFAULT '' COMMENT '图片地址',
+  PRIMARY KEY (`id`),
+  KEY `fid` (`fid`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+/*Data for the table `peerless_news_file` */
+
+insert  into `peerless_news_file`(`id`,`fid`,`file`) values (3,1,'http://www.tp.com/static/upload/201909/f5fbe0d21c94d07d.png'),(4,1,'http://www.tp.com/static/upload/201909/f5fbe0d21c94d07d.png');
+
+/*Table structure for table `peerless_point_log` */
+
+DROP TABLE IF EXISTS `peerless_point_log`;
+
+CREATE TABLE `peerless_point_log` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '自增ID',
+  `user_ip` varchar(15) NOT NULL DEFAULT '' COMMENT 'IP地址',
+  `user_id` int(11) NOT NULL COMMENT '用户ID',
+  `point` int(11) DEFAULT '1' COMMENT '积分',
+  `tag_id` int(11) NOT NULL DEFAULT '0' COMMENT '标识ID',
+  `content` varchar(255) NOT NULL DEFAULT '' COMMENT '描述',
+  `create_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='积分日志表';
+
+/*Data for the table `peerless_point_log` */
+
+insert  into `peerless_point_log`(`id`,`user_ip`,`user_id`,`point`,`tag_id`,`content`,`create_at`) values (1,'127.0.0.1',1,1,1,'签到送积分','2019-09-24 20:36:17'),(2,'127.0.0.2',2,2,2,'注册活动','2019-09-24 20:51:58');
+
 /*Table structure for table `peerless_sort` */
 
 DROP TABLE IF EXISTS `peerless_sort`;
@@ -56,7 +139,7 @@ CREATE TABLE `peerless_task` (
 
 /*Data for the table `peerless_task` */
 
-insert  into `peerless_task`(`id`,`name`,`order`,`sort_id`,`tpl_id`,`title`,`answer`,`score`,`start_time`,`end_time`,`status`,`is_deleted`) values (3,'彩票预测',3,6,8,'明日双色球蓝球预测。','\"\"',3,'2019-08-23 00:00:00','2019-08-24 00:00:00',0,0),(4,'猜涨跌',1,5,1,'明日上证指数涨跌预测。','\"\"',1,'2019-09-03 00:00:00','2019-09-04 00:00:00',0,0);
+insert  into `peerless_task`(`id`,`name`,`order`,`sort_id`,`tpl_id`,`title`,`answer`,`score`,`start_time`,`end_time`,`status`,`is_deleted`) values (3,'彩票预测',3,6,8,'明日双色球蓝球预测。','\"\"',3,'2019-08-23 00:00:00','2019-08-24 00:00:00',1,0),(4,'猜涨跌',1,5,1,'明日上证指数涨跌预测。','\"\"',1,'2019-09-03 00:00:00','2019-09-04 00:00:00',0,0);
 
 /*Table structure for table `peerless_tpl` */
 
@@ -140,11 +223,11 @@ CREATE TABLE `system_log` (
   `content` text NOT NULL COMMENT '操作内容描述',
   `create_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=utf8 COMMENT='系统操作日志表';
+) ENGINE=InnoDB AUTO_INCREMENT=50 DEFAULT CHARSET=utf8 COMMENT='系统操作日志表';
 
 /*Data for the table `system_log` */
 
-insert  into `system_log`(`id`,`ip`,`node`,`username`,`action`,`content`,`create_at`) values (23,'127.0.0.1','admin/login/index','admin','系统管理','用户登录系统成功','2019-08-22 15:00:24'),(24,'127.0.0.1','admin/login/out','admin','系统管理','用户退出系统成功','2019-08-22 18:36:57'),(25,'127.0.0.1','admin/login/index','admin','系统管理','用户登录系统成功','2019-08-22 18:37:01'),(26,'127.0.0.1','admin/login/index','admin','系统管理','用户登录系统成功','2019-08-31 20:36:59'),(27,'127.0.0.1','admin/login/index','admin','系统管理','用户登录系统成功','2019-08-31 21:05:53'),(28,'127.0.0.1','admin/login/index','admin','系统管理','用户登录系统成功','2019-09-01 19:52:26'),(29,'127.0.0.1','admin/login/index','admin','系统管理','用户登录系统成功','2019-09-02 19:14:29'),(30,'127.0.0.1','admin/login/index','admin','系统管理','用户登录系统成功','2019-09-03 19:54:22'),(31,'127.0.0.1','admin/login/index','admin','系统管理','用户登录系统成功','2019-09-03 20:53:10');
+insert  into `system_log`(`id`,`ip`,`node`,`username`,`action`,`content`,`create_at`) values (23,'127.0.0.1','admin/login/index','admin','系统管理','用户登录系统成功','2019-08-22 15:00:24'),(24,'127.0.0.1','admin/login/out','admin','系统管理','用户退出系统成功','2019-08-22 18:36:57'),(25,'127.0.0.1','admin/login/index','admin','系统管理','用户登录系统成功','2019-08-22 18:37:01'),(26,'127.0.0.1','admin/login/index','admin','系统管理','用户登录系统成功','2019-08-31 20:36:59'),(27,'127.0.0.1','admin/login/index','admin','系统管理','用户登录系统成功','2019-08-31 21:05:53'),(28,'127.0.0.1','admin/login/index','admin','系统管理','用户登录系统成功','2019-09-01 19:52:26'),(29,'127.0.0.1','admin/login/index','admin','系统管理','用户登录系统成功','2019-09-02 19:14:29'),(30,'127.0.0.1','admin/login/index','admin','系统管理','用户登录系统成功','2019-09-03 19:54:22'),(31,'127.0.0.1','admin/login/index','admin','系统管理','用户登录系统成功','2019-09-03 20:53:10'),(32,'127.0.0.1','admin/login/index','admin','系统管理','用户登录系统成功','2019-09-04 20:26:09'),(33,'127.0.0.1','admin/login/index','admin','系统管理','用户登录系统成功','2019-09-05 19:42:40'),(34,'127.0.0.1','admin/config/index','admin','系统管理','系统参数配置成功','2019-09-05 19:45:58'),(35,'127.0.0.1','admin/login/out','admin','系统管理','用户退出系统成功','2019-09-05 20:04:15'),(36,'127.0.0.1','admin/login/index','admin','系统管理','用户登录系统成功','2019-09-05 20:04:19'),(37,'127.0.0.1','admin/login/index','admin','系统管理','用户登录系统成功','2019-09-05 20:06:43'),(38,'127.0.0.1','admin/login/index','admin','系统管理','用户登录系统成功','2019-09-05 21:09:15'),(39,'127.0.0.1','admin/login/index','admin','系统管理','用户登录系统成功','2019-09-05 21:10:28'),(40,'127.0.0.1','admin/login/index','admin','系统管理','用户登录系统成功','2019-09-07 17:22:31'),(41,'127.0.0.1','admin/login/index','admin','系统管理','用户登录系统成功','2019-09-07 17:47:04'),(42,'127.0.0.1','admin/login/index','admin','系统管理','用户登录系统成功','2019-09-08 15:15:37'),(43,'127.0.0.1','admin/login/index','admin','系统管理','用户登录系统成功','2019-09-09 20:49:27'),(44,'127.0.0.1','admin/login/index','admin','系统管理','用户登录系统成功','2019-09-09 20:52:11'),(45,'127.0.0.1','admin/login/index','admin','系统管理','用户登录系统成功','2019-09-12 20:59:56'),(46,'127.0.0.1','admin/login/index','admin','系统管理','用户登录系统成功','2019-09-13 14:23:29'),(47,'127.0.0.1','admin/login/index','admin','系统管理','用户登录系统成功','2019-09-13 20:10:01'),(48,'127.0.0.1','admin/login/index','admin','系统管理','用户登录系统成功','2019-09-21 12:10:04'),(49,'127.0.0.1','admin/login/index','admin','系统管理','用户登录系统成功','2019-09-24 19:37:28');
 
 /*Table structure for table `system_menu` */
 
@@ -165,11 +248,11 @@ CREATE TABLE `system_menu` (
   `create_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   PRIMARY KEY (`id`),
   KEY `index_system_menu_node` (`node`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=100 DEFAULT CHARSET=utf8 COMMENT='系统菜单表';
+) ENGINE=InnoDB AUTO_INCREMENT=104 DEFAULT CHARSET=utf8 COMMENT='系统菜单表';
 
 /*Data for the table `system_menu` */
 
-insert  into `system_menu`(`id`,`pid`,`title`,`node`,`icon`,`url`,`params`,`target`,`sort`,`status`,`create_by`,`create_at`) values (2,0,'系统管理','','','#','','_self',1000,1,0,'2015-11-16 19:15:38'),(4,2,'系统配置','','','#','','_self',100,1,0,'2016-03-14 18:12:55'),(5,4,'网站参数','','fa fa-apple','admin/config/index','','_self',20,1,0,'2016-05-06 14:36:49'),(6,4,'文件存储','','fa fa-save','admin/config/file','','_self',30,1,0,'2016-05-06 14:39:43'),(9,20,'操作日志','','glyphicon glyphicon-console','admin/log/index','','_self',50,1,0,'2017-03-24 15:49:31'),(19,20,'权限管理','','fa fa-user-secret','admin/auth/index','','_self',10,1,0,'2015-11-17 13:18:12'),(20,2,'系统权限','','','#','','_self',200,1,0,'2016-03-14 18:11:41'),(21,20,'系统菜单','','glyphicon glyphicon-menu-hamburger','admin/menu/index','','_self',30,1,0,'2015-11-16 19:16:16'),(22,20,'节点管理','','fa fa-ellipsis-v','admin/node/index','','_self',20,1,0,'2015-11-16 19:16:16'),(29,20,'系统用户','','fa fa-users','admin/user/index','','_self',40,1,0,'2016-10-31 14:31:40'),(61,0,'微信管理','','','#','','_self',2000,1,0,'2017-03-29 11:00:21'),(62,61,'微信对接配置','','','#','','_self',100,1,0,'2017-03-29 11:03:38'),(63,62,'微信接口配置\r\n','','fa fa-usb','wechat/config/index','','_self',10,1,0,'2017-03-29 11:04:44'),(65,61,'微信粉丝管理','','','#','','_self',300,1,0,'2017-03-29 11:08:32'),(66,65,'粉丝标签','','fa fa-tags','wechat/tags/index','','_self',10,1,0,'2017-03-29 11:09:41'),(67,65,'已关注粉丝','','fa fa-wechat','wechat/fans/index','','_self',20,1,0,'2017-03-29 11:10:07'),(68,61,'微信订制','','','#','','_self',200,1,0,'2017-03-29 11:10:39'),(69,68,'微信菜单定制','','glyphicon glyphicon-phone','wechat/menu/index','','_self',40,1,0,'2017-03-29 11:11:08'),(70,68,'关键字管理','','fa fa-paw','wechat/keys/index','','_self',10,1,0,'2017-03-29 11:11:49'),(71,68,'关注自动回复','','fa fa-commenting-o','wechat/keys/subscribe','','_self',20,1,0,'2017-03-29 11:12:32'),(81,68,'无配置默认回复','','fa fa-commenting-o','wechat/keys/defaults','','_self',30,1,0,'2017-04-21 14:48:25'),(82,61,'素材资源管理','','','#','','_self',300,1,0,'2017-04-24 11:23:18'),(83,82,'添加图文','','fa fa-folder-open-o','wechat/news/add?id=1','','_self',20,1,0,'2017-04-24 11:23:40'),(85,82,'图文列表','','fa fa-file-pdf-o','wechat/news/index','','_self',10,1,0,'2017-04-24 11:25:45'),(86,65,'粉丝黑名单','','fa fa-reddit-alien','wechat/fans/back','','_self',30,1,0,'2017-05-05 16:17:03'),(87,0,'插件案例','','','#','','_self',3000,1,0,'2017-07-10 15:10:16'),(88,87,'第三方插件','','','#','','_self',0,1,0,'2017-07-10 15:10:37'),(90,88,'PCAS 省市区','','','demo/plugs/region','','_self',0,1,0,'2017-07-10 18:45:47'),(91,87,'内置插件','','','#','','_self',0,1,0,'2017-07-10 18:56:59'),(92,91,'文件上传','','','demo/plugs/file','','_self',0,1,0,'2017-07-10 18:57:22'),(93,88,'富文本编辑器','','','demo/plugs/editor','','_self',0,1,0,'2017-07-28 15:19:44'),(94,0,'后台首页','','','admin/index/main','','_self',0,1,0,'2017-08-08 11:28:43'),(95,98,'任务管理','','','#','','_self',0,1,0,'2019-08-17 20:46:28'),(96,95,'任务列表','','fa fa-indent','/admin/task/index','','_self',0,1,0,'2019-08-17 20:53:35'),(97,95,'任务分类','','fa fa-ra','/admin/task/sort','','_self',0,1,0,'2019-08-17 20:57:54'),(98,0,'无双榜','','','#','','_self',0,1,0,'2019-08-17 21:02:52'),(99,95,'任务模板','','glyphicon glyphicon-leaf','/admin/task/tpl','','_self',0,1,0,'2019-08-22 18:25:12');
+insert  into `system_menu`(`id`,`pid`,`title`,`node`,`icon`,`url`,`params`,`target`,`sort`,`status`,`create_by`,`create_at`) values (2,0,'系统管理','','','#','','_self',1000,1,0,'2015-11-16 19:15:38'),(4,2,'系统配置','','','#','','_self',100,1,0,'2016-03-14 18:12:55'),(5,4,'网站参数','','fa fa-apple','admin/config/index','','_self',20,1,0,'2016-05-06 14:36:49'),(6,4,'文件存储','','fa fa-save','admin/config/file','','_self',30,1,0,'2016-05-06 14:39:43'),(9,20,'操作日志','','glyphicon glyphicon-console','admin/log/index','','_self',50,1,0,'2017-03-24 15:49:31'),(19,20,'权限管理','','fa fa-user-secret','admin/auth/index','','_self',10,1,0,'2015-11-17 13:18:12'),(20,2,'系统权限','','','#','','_self',200,1,0,'2016-03-14 18:11:41'),(21,20,'系统菜单','','glyphicon glyphicon-menu-hamburger','admin/menu/index','','_self',30,1,0,'2015-11-16 19:16:16'),(22,20,'节点管理','','fa fa-ellipsis-v','admin/node/index','','_self',20,1,0,'2015-11-16 19:16:16'),(29,20,'系统用户','','fa fa-users','admin/user/index','','_self',40,1,0,'2016-10-31 14:31:40'),(61,0,'微信管理','','','#','','_self',2000,1,0,'2017-03-29 11:00:21'),(62,61,'微信对接配置','','','#','','_self',100,1,0,'2017-03-29 11:03:38'),(63,62,'微信接口配置\r\n','','fa fa-usb','wechat/config/index','','_self',10,1,0,'2017-03-29 11:04:44'),(65,61,'微信粉丝管理','','','#','','_self',300,1,0,'2017-03-29 11:08:32'),(66,65,'粉丝标签','','fa fa-tags','wechat/tags/index','','_self',10,1,0,'2017-03-29 11:09:41'),(67,65,'已关注粉丝','','fa fa-wechat','wechat/fans/index','','_self',20,1,0,'2017-03-29 11:10:07'),(68,61,'微信订制','','','#','','_self',200,1,0,'2017-03-29 11:10:39'),(69,68,'微信菜单定制','','glyphicon glyphicon-phone','wechat/menu/index','','_self',40,1,0,'2017-03-29 11:11:08'),(70,68,'关键字管理','','fa fa-paw','wechat/keys/index','','_self',10,1,0,'2017-03-29 11:11:49'),(71,68,'关注自动回复','','fa fa-commenting-o','wechat/keys/subscribe','','_self',20,1,0,'2017-03-29 11:12:32'),(81,68,'无配置默认回复','','fa fa-commenting-o','wechat/keys/defaults','','_self',30,1,0,'2017-04-21 14:48:25'),(82,61,'素材资源管理','','','#','','_self',300,1,0,'2017-04-24 11:23:18'),(83,82,'添加图文','','fa fa-folder-open-o','wechat/news/add?id=1','','_self',20,1,0,'2017-04-24 11:23:40'),(85,82,'图文列表','','fa fa-file-pdf-o','wechat/news/index','','_self',10,1,0,'2017-04-24 11:25:45'),(86,65,'粉丝黑名单','','fa fa-reddit-alien','wechat/fans/back','','_self',30,1,0,'2017-05-05 16:17:03'),(87,0,'插件案例','','','#','','_self',3000,1,0,'2017-07-10 15:10:16'),(88,87,'第三方插件','','','#','','_self',0,1,0,'2017-07-10 15:10:37'),(90,88,'PCAS 省市区','','','demo/plugs/region','','_self',0,1,0,'2017-07-10 18:45:47'),(91,87,'内置插件','','','#','','_self',0,1,0,'2017-07-10 18:56:59'),(92,91,'文件上传','','','demo/plugs/file','','_self',0,1,0,'2017-07-10 18:57:22'),(93,88,'富文本编辑器','','','demo/plugs/editor','','_self',0,1,0,'2017-07-28 15:19:44'),(94,0,'后台首页','','','admin/index/main','','_self',0,1,0,'2017-08-08 11:28:43'),(95,98,'资讯管理','','','#','','_self',0,1,0,'2019-08-17 20:46:28'),(96,95,'任务列表','','fa fa-indent','/admin/task/index','','_self',1,1,0,'2019-08-17 20:53:35'),(97,95,'分类管理','','fa fa-ra','/admin/task/sort','','_self',3,1,0,'2019-08-17 20:57:54'),(98,0,'无双榜','','','#','','_self',0,1,0,'2019-08-17 21:02:52'),(99,95,'任务模板','','glyphicon glyphicon-leaf','/admin/task/tpl','','_self',2,1,0,'2019-08-22 18:25:12'),(100,98,'用户管理','','','#','','_self',0,1,0,'2019-09-05 19:50:24'),(101,95,'资讯列表','','fa fa-newspaper-o','/admin/news/index','','_self',0,1,0,'2019-09-05 19:55:36'),(102,100,'用户列表','','fa fa-user','/admin/member/index','','_self',0,1,0,'2019-09-13 20:40:39'),(103,100,'积分日志','','fa fa-usd','/admin/points/index','','_self',0,1,0,'2019-09-13 21:14:34');
 
 /*Table structure for table `system_node` */
 
@@ -233,7 +316,7 @@ CREATE TABLE `system_user` (
 
 /*Data for the table `system_user` */
 
-insert  into `system_user`(`id`,`username`,`password`,`qq`,`mail`,`phone`,`desc`,`login_num`,`login_at`,`status`,`authorize`,`is_deleted`,`create_by`,`create_at`) values (10000,'admin','21232f297a57a5a743894a0e4a801fc3','22222222','sdfsd@Qq.com1','13888888855','dfgsdfgsfd',27059,'2019-09-03 20:53:10',1,'1',0,NULL,'2015-11-13 15:14:22'),(10001,'leiluo','08fbbc6451016ca1b6a5f4ea5ed52da7',NULL,'','','',0,NULL,1,'2',0,NULL,'2019-08-21 18:00:34');
+insert  into `system_user`(`id`,`username`,`password`,`qq`,`mail`,`phone`,`desc`,`login_num`,`login_at`,`status`,`authorize`,`is_deleted`,`create_by`,`create_at`) values (10000,'admin','21232f297a57a5a743894a0e4a801fc3','22222222','sdfsd@Qq.com1','13888888855','dfgsdfgsfd',27075,'2019-09-24 19:37:28',1,'1',0,NULL,'2015-11-13 15:14:22'),(10001,'leiluo','08fbbc6451016ca1b6a5f4ea5ed52da7',NULL,'','','',0,NULL,1,'2',0,NULL,'2019-08-21 18:00:34');
 
 /*Table structure for table `wechat_fans` */
 

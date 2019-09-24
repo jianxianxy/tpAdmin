@@ -5,21 +5,14 @@ use controller\BasicAdmin;
 use service\DataService;
 use think\Db;
 
-/**
- * 系统日志管理
- * Class Log
- * @package app\admin\controller
- * @author Anyon <zoujingli@qq.com>
- * @date 2017/02/15 18:12
- */
-class Log extends BasicAdmin
+class Points extends BasicAdmin
 {
 
     /**
      * 指定当前数据表
      * @var string
      */
-    public $table = 'SystemLog';
+    public $table = 'peerless_point_log';
 
     /**
      * 日志列表
@@ -27,20 +20,19 @@ class Log extends BasicAdmin
      */
     public function index()
     {
-        // 日志行为类别
-        $actions = Db::name($this->table)->group('action')->column('action');
-        $this->assign('actions', $actions);
-        // 日志数据库对象
-        list($this->title, $get) = ['系统操作日志', $this->request->get()];
+        $this->title = '积分日志';
+        $this->assign('title', $this->title);
+        $get = $this->request->get();
         $db = Db::name($this->table)->order('id desc');
-        foreach (['action', 'content', 'username'] as $key) {
-            (isset($get[$key]) && $get[$key] !== '') && $db->whereLike($key, "%{$get[$key]}%");
+        if(isset($get['user_id']) && $get['user_id'] > 0){
+            $db->where(['user_id' => $get['user_id']]);
         }
         if (isset($get['date']) && $get['date'] !== '') {
             list($start, $end) = explode('-', str_replace(' ', '', $get['date']));
             $db->whereBetween('create_at', ["{$start} 00:00:00", "{$end} 23:59:59"]);
         }
-        return parent::_list($db);
+        $result = parent::_list($db,true,false);
+        return $this->fetch('./view/points/points.index.html', $result);
     }
 
     /**
@@ -49,12 +41,7 @@ class Log extends BasicAdmin
      */
     protected function _index_data_filter(&$data)
     {
-        $ip = new \Ip2Region();
-        foreach ($data as &$vo) {
-            $result = $ip->btreeSearch($vo['ip']);
-            $vo['isp'] = isset($result['region']) ? $result['region'] : '';
-            $vo['isp'] = str_replace(['|0|0|0|0', '0', '|'], ['', '', ' '], $vo['isp']);
-        }
+
     }
 
     /**
