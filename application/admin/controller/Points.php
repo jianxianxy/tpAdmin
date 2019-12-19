@@ -2,7 +2,6 @@
 namespace app\admin\controller;
 
 use controller\BasicAdmin;
-use service\DataService;
 use think\Db;
 
 class Points extends BasicAdmin
@@ -32,7 +31,7 @@ class Points extends BasicAdmin
             $db->whereBetween('create_at', ["{$start} 00:00:00", "{$end} 23:59:59"]);
         }
         $result = parent::_list($db,true,false);
-        return $this->fetch('./view/points/points.index.html', $result);
+        return $this->fetch('./view/member/points.index.html', $result);
     }
 
     /**
@@ -43,16 +42,4 @@ class Points extends BasicAdmin
     {
 
     }
-
-    /**
-     * 日志删除操作
-     */
-    public function del()
-    {
-        if (DataService::update($this->table)) {
-            $this->success("日志删除成功!", '');
-        }
-        $this->error("日志删除失败, 请稍候再试!");
-    }
-
 }

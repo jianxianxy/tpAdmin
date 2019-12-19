@@ -5,7 +5,7 @@ use controller\BasicAdmin;
 use service\DataService;
 use think\Db;
 
-class Points extends BasicAdmin
+class Record extends BasicAdmin
 {
 
     /**

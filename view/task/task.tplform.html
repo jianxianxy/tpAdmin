@@ -8,6 +8,16 @@
     </div>    
     
     <div class="layui-form-item">
+        {if $vo.id}
+        <label class="layui-form-label">类型</label>
+        <div class="layui-input-inline" style="width:120px;">
+            <select name="type" id="chtype" disabled="1">
+                {foreach $type AS $key => $val}
+                <option value="{$key}" {if $key == $vo.type}selected{/if}>{$val}</option>
+                {/foreach}
+            </select>
+        </div>
+        {else}
         <label class="layui-form-label">类型</label>
         <div class="layui-input-inline" style="width:120px;">
             <select name="type" id="chtype" lay-filter="chtype">
@@ -16,6 +26,7 @@
                 {/foreach}
             </select>
         </div>
+        {/if}
         <label class="layui-form-label">排版</label>
         <div class="layui-input-inline" style="width:120px;">
             <select name="style">
