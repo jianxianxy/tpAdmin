@@ -56,9 +56,8 @@ require.config({
         'jquery.cookies': {deps: ['jquery']},
         'jquery.masonry': {deps: ['jquery']},
     },
-    // deps: [],
-    // 开启debug模式，不缓存资源
-    // urlArgs: "ver=" + (new Date()).getTime()
+    // deps: [],    
+    //urlArgs: "ver=" + (new Date()).getTime() //开启debug模式，不缓存资源
 });
 
 // UI框架初始化
